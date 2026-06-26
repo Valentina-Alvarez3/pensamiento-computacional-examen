@@ -1,0 +1,180 @@
+// --- VARIABLES DE ESTADO Y JUEGO ---
+let estado = 0;       // Controla la pantalla actual (0: Inicio, 1: Juego, 2: Ganador, 3: Final) 
+let puntaje = 0;      // Contador de puntos del jugador
+
+// --- VARIABLES DE PERSONAJES (Vectores para dinamismo) ---
+let pacmanX, pacmanY;   // Posición de Pac-Orange
+let tamPacman;          // Tamaño variable calculado dinámicamente
+let comidaX, comidaY;   // Posición del objetivo (comida)
+
+// --- VARIABLES MULTIMEDIA ---
+let camara;             // Captura de video en vivo 
+let remolino;           // Imagen de fondo para el desenlace 
+let sonidoJuego;        // Música ambiental del juego 
+let sonidoChampion;     // Efecto de sonido al ganar 
+
+function preload() {
+  // Carga de recursos multimedia antes de iniciar el programa 
+  remolino = loadImage("remolino.jpg");
+  sonidoJuego = loadSound("juego.mp3");
+  sonidoChampion = loadSound("champion.mp3");
+}
+
+function setup() {
+  createCanvas(640, 480);
+
+  // Inicialización de la captura de Video (Input sutil del usuario) 
+  camara = createCapture(VIDEO);
+  camara.size(160, 120);
+  camara.hide(); // Ocultamos el elemento HTML nativo para dibujarlo en el canvas
+
+  // Posicionamiento inicial aleatorio usando random() 
+  comidaX = width / 2;
+  comidaY = height / 2;
+  pacmanX = random(width);
+  pacmanY = random(height);
+
+  textAlign(CENTER, CENTER);
+}
+
+function draw() {
+  // Máquina de estados clara y comprensible (Requisito de Calidad de Sistema) 
+  if (estado == 0) {
+    pantallaInicio();
+  } else if (estado == 1) {
+    pantallaJuego();
+  } else if (estado == 2) {
+    pantallaWinner();
+  } else if (estado == 3) {
+    pantallaFinal();
+  }
+}
+
+// --- PANTALLA 0: INICIO ---
+function pantallaInicio() {
+  background(10, 10, 25); // Color oscuro con intención estética Noir
+
+  fill(255, 140, 0);
+  textSize(50);
+  text("PAC-ORANGE", width / 2, 150);
+
+  fill(255);
+  textSize(20);
+  text("Presiona ENTER para comenzar el viaje", width / 2, 280);
+}
+
+// --- PANTALLA 1: JUEGO ACTIVO ---
+function pantallaJuego() {
+  background(0);
+
+  // Render de la cámara interactiva en la esquina superior derecha 
+  image(camara, 470, 10, 160, 120);
+
+  // Movimiento interactivo: El objetivo sigue el input del mouse 
+  comidaX = mouseX;
+  comidaY = mouseY;
+
+  // Lógica de persecución computacional (Inteligencia artificial básica)
+  if (pacmanX < comidaX) pacmanX += 2.5;
+  else pacmanX -= 2.5;
+
+  if (pacmanY < comidaY) pacmanY += 2.5;
+  else pacmanY -= 2.5;
+
+  // MAPEADO DINÁMICO: El tamaño de Pacman crece proporcionalmente a los puntos 
+  tamPacman = map(puntaje, 0, 10, 40, 110);
+
+  // Dibujo de entidades con funciones modularizadas 
+  dibujarPacOrange();
+  dibujarComida();
+
+  // CONDICIONAL DE COLISIÓN: Uso de dist() para calcular proximidad
+  if (dist(pacmanX, pacmanY, comidaX, comidaY) < (tamPacman / 2 + 15)) {
+    puntaje++;
+    // Reposicionamiento aleatorio dinámico tras la captura 
+    pacmanX = random(width);
+    pacmanY = random(height);
+  }
+
+  // CONDICIÓN DE VICTORIA (Alcanzar 10 puntos)
+  if (puntaje >= 10) {
+    sonidoJuego.stop(); // Detiene la música de fondo de manera limpia
+    sonidoChampion.play(); // Dispara el feedback auditivo de victoria 
+    estado = 2;
+  }
+
+  // Interfaz de usuario (UI) clara y legible 
+  fill(255);
+  textSize(24);
+  textAlign(LEFT, TOP);
+  text("Puntaje: " + puntaje, 20, 20);
+  textAlign(CENTER, CENTER); // Reseteo de alineación
+}
+
+// --- PANTALLA 2: GANADOR ---
+function pantallaWinner() {
+  background(20, 80, 40); // Fondo verde coherente con el éxito visual 
+
+  fill(255);
+  textSize(60);
+  text("¡COMPLETO!", width / 2, 120);
+
+  textSize(80);
+  text("🏅", width / 2, 240);
+
+  textSize(22);
+  text("Haz click en la pantalla para avanzar al desenlace", width / 2, 360);
+}
+
+// --- PANTALLA 3: FINAL (Conceptualmente disruptivo) ---
+function pantallaFinal() {
+  background(5);
+
+  // Primera capa de la imagen con transparencia controlada 
+  tint(255, 0, 150, 100);
+  image(remolino, 0, 0, width, height);
+
+  // Segunda capa BlendMode para efectos avanzados de procesamiento gráfico
+  blendMode(SCREEN);
+  tint(0, 180, 255, 120);
+  // Movimiento interactivo invertido basado en los inputs del mouse del usuario
+  image(remolino, mouseX / 8, mouseY / 8, width, height);
+  blendMode(BLEND); // Reseteo obligatorio del blendMode para no romper textos
+
+  // Textos finales de reflexión del sistema
+  noStroke();
+  fill(255);
+  textSize(24);
+  text("Si no sales dentro de 5 min", width / 2, height - 100);
+  textSize(16);
+  fill(200);
+  text("Quedaras atrapado en el juego.", width / 2, height - 60);
+}
+
+// --- COMPONENTES VISUALES MODULARES ---
+function dibujarPacOrange() {
+  fill(255, 140, 0);
+  noStroke();
+  ellipse(pacmanX, pacmanY, tamPacman, tamPacman);
+}
+
+function dibujarComida() {
+  fill(255, 230, 0);
+  ellipse(comidaX, comidaY, 25, 25);
+}
+
+// --- MANEJO DE EVENTOS DE ENTRADA (INPUTS) ---
+function keyPressed() {
+  // Transición limpia de estado 0 a 1 mediante la tecla Enter 
+  if (keyCode === ENTER && estado == 0) {
+    estado = 1;
+    sonidoJuego.loop(); // Inicia la música en bucle para el gameplay
+  }
+}
+
+function mousePressed() {
+  // Avanzar del estado de ganador al estado final con interacción de clic 
+  if (estado == 2) {
+    estado = 3;
+  }
+}
