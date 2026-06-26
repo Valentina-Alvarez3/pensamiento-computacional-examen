@@ -1,8 +1,8 @@
-# pensamiento-computacional-examen
+# Pensamiento-computacional-examen
 **Proceso de p5js de sistema inetractivo avanzado**
 PAC-ORANGE
 
-Autor/a: Valentina Álvarez
+Autora: Valentina Álvarez
 
 Asignatura: Pensamiento Computacional
 
@@ -29,6 +29,7 @@ En la escena de interacción principal, el sistema renderiza un lienzo digital q
 El software opera como un sistema de procesamiento continuo que recolecta entradas de hardware, ejecuta cálculos algorítmicos matemáticos en cada fotograma y genera respuestas dinámicas visuales y sonoras.
 
 **Inputs (Entradas)**
+
 -Hardware de Video (createCapture(VIDEO)): Flujo continuo de fotogramas de la webcam de la usuaria.
 
 -Coordenadas de Posición (mouseX, mouseY): Datos de entrada analógicos capturados mediante el movimiento físico del mouse.
