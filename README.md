@@ -20,9 +20,10 @@ Link editable para revisar el código del proyecto
 
 **1. DESCRIPCION DEL PROYECTO**
 
-PAC-ORANGE es un sistema visual interactivo programado en JavaScript utilizando el entorno p5.js. El software reinterpreta la estructura dinámica del videojuego arcade clásico Pac-Man mediante un entorno gráfico responsivo. Su funcionamiento está controlado por una máquina de estados lógicos que divide la experiencia en 4 momentos independientes: interfaz de bienvenida, escena principal de juego interactivo, pantalla de victoria y un desenlace abstracto de cierre.
+PAC-ORANGE es un sistema visual interactivo que reinterpreta la estructura dinámica del videojuego arcade clásico Pac-Man mediante un entorno gráfico responsivo. Su funcionamiento está controlado por una máquina de estados lógicos que divide la experiencia en 4 momentos independientes: interfaz de bienvenida, escena principal de juego interactivo, pantalla de victoria y un desenlace abstracto de cierre.
 
-En la escena de interacción principal, el sistema renderiza un lienzo digital que combina una grilla vectorial automatizada con entidades geométricas en movimiento y la captura en tiempo real de la cámara del usuario. El objetivo operativo del sistema es guiar un elemento interactivo usando el cursor mientras se evade a un persecutor autónomo que se escala de manera directamente proporcional al éxito del usuario.
+En la escena de interacción principal, el sistema renderiza un lienzo digital que combina una grilla vectorial automatizada con entidades geométricas en movimiento y la captura en tiempo real de la cámara, esta disposición alude directamente al formato contemporáneo de un video gameplay o transmisión de streaming (Facecam), utilizando un código visual propio de la cultura digital para situar al espectador en el rol de un jugador observado.
+El objetivo operativo del sistema es guiar un elemento interactivo usando el cursor mientras se evade a un persecutor autónomo que se escala de manera directamente proporcional al éxito del usuario.
 
 **2. Sistema Computacional**
 
